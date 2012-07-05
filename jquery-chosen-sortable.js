@@ -1,51 +1,38 @@
 /*
  * Author: Yves Van Broekhoven & Simon Menke
- * Created at: 2012-03-16
+ * Created at: 2012-07-05
+ *
+ * Requirements:
+ * - jQuery
+ * - jQuery UI
+ * - Chosen
+ *
+ * Version: 1.0.0
  */
-(function($){
+(function($) {
 
-  var _update;
+  $.fn.chosenOrder = function() {
+    var $this   = this.filter('.chzn-sortable[multiple]').first(),
+        $chosen = $this.siblings('.chzn-container');
 
-  /*
-   * On sort update
-   * @context ul.chzn-choices
-   */
-  _update = function(){
-    $form_field     = $(this).closest('.chzn-container').siblings('select');
-    $options        = $('option', $form_field);
-    $clone          = $form_field.clone();
-    
-    $clone.children().remove();
-    
-    $(this).find('li[class!="search-field"]').each(function(){
-      var result = new RegExp(/chzn_c_(\d*)/).exec($(this).attr('id'));
-      if (result[1]) {
-        var $option = $options.eq(parseInt(result[1], 10));
-        $option.appendTo($clone);
-      } else {
-        console.warn('Cannot create index from ' + $(this).attr('id'));
+    return $($chosen.find('.chzn-choices li[class!="search-field"]').map( function() {
+      if (!this) {
+        return undefined;
       }
-    //  var $option = $options.filter('option[value="' + $(this).attr('rel') + '"]');
-    //    $clone.append($option);
-    });
-    
-    $options.not(':selected').appendTo($clone);
-    
-    $form_field.replaceWith($clone);
-
-    console.info('List sorted');
+      return $this.find('option:contains(' + $(this).text() + ')')[0];
+    }));
   };
-  
+
 
   /*
    * Extend jQuery
    */
   $.fn.chosenSortable = function(){
-    $this = this.filter('.chzn-sortable');
+    var $this = this.filter('.chzn-sortable[multiple]');
 
     $this.each(function(){
-      $select = $(this);
-      $chosen = $select.siblings('.chzn-container');
+      var $select = $(this);
+      var $chosen = $select.siblings('.chzn-container');
 
       // On mousedown of choice element,
       // we don't want to display the dropdown list
@@ -57,10 +44,17 @@
 
       // Initialize jQuery UI Sortable
       $chosen.find('.chzn-choices').sortable({
-        'placeholder' : 'ui-state-highlight'
-      , 'items'       : 'li:not(.search-field)'
-      , 'update'      : _update
-      , 'tolerance'   : 'pointer'
+        'placeholder' : 'ui-state-highlight',
+        'items'       : 'li:not(.search-field)',
+        //'update'      : _update,
+        'tolerance'   : 'pointer'
+      });
+
+      // Intercept form submit & order the chosens
+      $select.closest('form').on('submit', function(){
+        var $options = $select.chosenOrder();
+        $select.children().remove();
+        $select.append($options);
       });
 
     });
