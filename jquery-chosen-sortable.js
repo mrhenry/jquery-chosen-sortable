@@ -1,12 +1,13 @@
 /*
  * Author: Yves Van Broekhoven & Simon Menke
- * Created at: 2012-03-16
+ * Created at: 2012-07-05
  *
  * Requirements:
  * - jQuery
  * - jQuery UI
  * - Chosen
  *
+ * Version: 0.0.1
  */
 (function($) {
 
@@ -19,38 +20,42 @@
   _update = function() {
     var $this         = $(this),
         $select       = $this.closest('.chzn-container').siblings('select'),
-        $options      = $('option', $form_field),
-        $select_clone = $form_field.clone();
-    
-    $select_clone.children().remove();
-    
+        $options      = $('option', $select),
+        $select_clone = $select.clone(),
+        $drop_results = $this.closest('.chzn-container').find('.chzn-drop .chzn-results');
+        $drop_results_clone = $drop_results.clone();
+
+    $select_clone.children().not(':eq(0)').remove();
+    $drop_results_clone.children().remove();
+
+    var i = 1;
     $this.find('li[class!="search-field"]').each(function() {
-      //var result = new RegExp(/chzn_c_(\d*)/).exec($(this).attr('id'));
-      //if (result[1]) {
-      //  var $option = $options.eq(parseInt(result[1], 10));
-      //  $option.appendTo($clone);
-      //} else {
-      //  try {
-      //    console.warn('Cannot create index from ' + $(this).attr('id'));
-      //  } catch(e) {}
-      //}
-      
-      //  var $option = $options.filter('option[value="' + $(this).attr('rel') + '"]');
-      //    $clone.append($option);
+      $(this).attr('id', $select.attr('id') + '_chzn_c_' + i);
+
+      var $option = $options.filter(':contains(' + $(this).text() + ')');
+      $option.appendTo($select_clone);
+      i++;
     });
-    
-    $options.not(':selected').appendTo($select_clone);
-    
-    $form_field.replaceWith($select_clone);
-    
-    //$(this).find('li[class!="search-field"]').each(function(idx){
-    //  var result = new RegExp(/chzn_c_(\d*)/).exec($(this).attr('id'));
-    //  console.log(result);
-    //});
+
+    $options.not(':selected').not(':eq(0)').each(function() {
+      $(this).appendTo($select_clone);
+    })
+
+    $select.replaceWith($select_clone);
+
+    $select_clone.find('option').each(function(){ console.log($(this).text())});
+    console.log("---");
+    $select_clone.find('option').not(':eq(0)').each(function(idx) {
+      var $li = $drop_results.find('li:contains(' + $(this).text() + ')');
+      $li.attr( 'id', $select.attr('id') + '_chzn_o_' + (idx + 1) );
+      $li.appendTo($drop_results_clone);
+    });
+
+    $drop_results.replaceWith($drop_results_clone);
 
     console.info('List sorted');
   };
-  
+
 
   /*
    * Extend jQuery
@@ -73,8 +78,8 @@
       // Initialize jQuery UI Sortable
       $chosen.find('.chzn-choices').sortable({
         'placeholder' : 'ui-state-highlight',
-        'items'       : 'li:not(.search-field)', 
-        'update'      : _update, 
+        'items'       : 'li:not(.search-field)',
+        'update'      : _update,
         'tolerance'   : 'pointer'
       });
 
