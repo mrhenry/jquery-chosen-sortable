@@ -19,7 +19,7 @@
       if (!this) {
         return undefined;
       }
-      return $this.find('option:contains(' + $(this).text() + ')')[0];
+      return $this.find('option:equals(' + $(this).text() + ')')[0];
     }));
   };
 
