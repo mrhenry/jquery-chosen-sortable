@@ -13,14 +13,24 @@
 
   $.fn.chosenOrder = function() {
     var $this   = this.filter('.chzn-sortable[multiple]').first(),
-        $chosen = $this.siblings('.chzn-container');
+        $chosen = $this.siblings('.chzn-container'),
+        unselected = [],
+        sorted;
 
-    return $($chosen.find('.chzn-choices li[class!="search-field"]').map( function() {
+    $this.find('option').each(function(){
+      !this.selected && unselected.push(this);
+    });
+
+    sorted = $($chosen.find('.chzn-choices li[class!="search-field"]').map( function() {
       if (!this) {
         return undefined;
       }
-      return $this.find('option:contains(' + $(this).text() + ')')[0];
+        var text = $.trim($(this).text());
+        return $this.find('option').filter(function () { return $(this).html() == text; })[0];
     }));
+
+    sorted.push.apply(sorted, unselected);
+    return sorted;
   };
 
 
@@ -55,6 +65,7 @@
         var $options = $select.chosenOrder();
         $select.children().remove();
         $select.append($options);
+        $select.trigger("liszt:updated");
       });
 
     });
