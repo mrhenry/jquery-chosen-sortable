@@ -12,10 +12,10 @@
 (function($) {
 
   $.fn.chosenOrder = function() {
-    var $this   = this.filter('.chzn-sortable[multiple]').first(),
-        $chosen = $this.siblings('.chzn-container');
+    var $this   = this.filter('.chosen-sortable[multiple]').first(),
+        $chosen = $this.siblings('.chosen-container');
 
-    return $($chosen.find('.chzn-choices li[class!="search-field"]').map( function() {
+    return $($chosen.find('.chosen-choices li[class!="search-field"]').map( function() {
       if (!this) {
         return undefined;
       }
@@ -28,22 +28,23 @@
    * Extend jQuery
    */
   $.fn.chosenSortable = function(){
-    var $this = this.filter('.chzn-sortable[multiple]');
+
+    var $this = this.filter('.chosen-sortable[multiple]');
 
     $this.each(function(){
       var $select = $(this);
-      var $chosen = $select.siblings('.chzn-container');
+      var $chosen = $select.siblings('.chosen-container');
 
       // On mousedown of choice element,
       // we don't want to display the dropdown list
-      $chosen.find('.chzn-choices').bind('mousedown', function(event){
+      $chosen.find('.chosen-choices').bind('mousedown', function(event){
         if ($(event.target).is('span')) {
           event.stopPropagation();
         }
       });
 
       // Initialize jQuery UI Sortable
-      $chosen.find('.chzn-choices').sortable({
+      $chosen.find('.chosen-choices').sortable({
         'placeholder' : 'ui-state-highlight',
         'items'       : 'li:not(.search-field)',
         //'update'      : _update,

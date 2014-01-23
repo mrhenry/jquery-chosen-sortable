@@ -64,8 +64,8 @@
   <script src="javascripts/jquery-chosen-sortable.min.js" type="text/javascript" charset="utf-8"></script>
   <script>
     $(function(){
-      $(".chzn-select").chosen().chosenSortable();
-      $(".chzn-select-deselect").chosen({
+      $(".chosen-select").chosen().chosenSortable();
+      $(".chosen-select-deselect").chosen({
         allow_single_deselect: true
       });
     });
@@ -79,7 +79,7 @@
       height: 19px;
     }
 
-    .chzn-container.sorting .chzn-drop {
+    .chosen-container.sorting .chosen-drop {
       display: none;
     }
   </style>
@@ -120,7 +120,7 @@
       </div>
       <div>
         <em>Into This</em>
-        <select data-placeholder="Choose a Country..." class="chzn-select" style="width:350px;" tabindex="2">
+        <select data-placeholder="Choose a Country..." class="chosen-select" style="width:350px;" tabindex="2">
           <option value=""></option>
           <option value="Seychelles">Seychelles</option>
           <option value="Sierra Leone">Sierra Leone</option>
@@ -208,7 +208,7 @@
       </div>
       <div>
         <em>Into This</em>
-        <select data-placeholder="Choose a Country..." class="chzn-select" multiple style="width:350px;" tabindex="4">
+        <select data-placeholder="Choose a Country..." class="chosen-select" multiple style="width:350px;" tabindex="4">
           <option value=""></option>
           <option value="United States">United States</option>
           <option value="United Kingdom">United Kingdom</option>
@@ -232,7 +232,7 @@
     <div class="side-by-side clearfix">
       <div>
         <em>Single Select with Groups</em>
-        <select data-placeholder="Your Favorite Football Team" style="width:350px;" class="chzn-select" tabindex="5">
+        <select data-placeholder="Your Favorite Football Team" style="width:350px;" class="chosen-select" tabindex="5">
           <option value=""></option>
           <optgroup label="NFC EAST">
             <option>Dallas Cowboys</option>
@@ -286,7 +286,7 @@
       </div>
       <div>
         <em>Multiple Select with Groups</em>
-        <select name="football" data-placeholder="Your Favorite Football Team" style="width:350px;" class="chzn-select  chzn-sortable" multiple tabindex="6">
+        <select name="football" data-placeholder="Your Favorite Football Team" style="width:350px;" class="chosen-select  chosen-sortable" multiple tabindex="6">
           <option value=""></option>
           <optgroup label="NFC EAST">
             <option>Dallas Cowboys</option>
@@ -345,7 +345,7 @@
       <p>Chosen automatically highlights selected options and removes disabled options.</p>
       <div>
         <em>Single Select</em>
-        <select data-placeholder="Your Favorite Type of Bear" style="width:350px;" class="chzn-select" tabindex="7">
+        <select data-placeholder="Your Favorite Type of Bear" style="width:350px;" class="chosen-select" tabindex="7">
           <option value=""></option>
           <option>American Black Bear</option>
           <option>Asiatic Black Bear</option>
@@ -359,7 +359,7 @@
       </div>
       <div>
         <em>Multiple Select</em>
-        <select data-placeholder="Your Favorite Types of Bear" style="width:350px;" multiple class="chzn-select chzn-sortable" id="test_me" name="test_me_form" tabindex="8">
+        <select data-placeholder="Your Favorite Types of Bear" style="width:350px;" multiple class="chosen-select chosen-sortable" id="test_me" name="test_me_form" tabindex="8">
           <option value=""></option>
           <option>American Black Bear</option>
           <option>Asiatic Black Bear</option>
@@ -377,7 +377,7 @@
     <h2>Default Text Support</h2>
     <div class="side-by-side clearfix">
       <p>Chosen automatically sets the default field text ("Choose a country...") by reading the select element's data-placeholder value. If no data-placeholder value is present, it will default to "Select Some Option" or "Select Some Options" depending on whether the select is single or multiple. You can change these elements in the plugin js file as you see fit.</p>
-      <code>&lt;select <strong>data-placeholder="Choose a country..."</strong> style="width:350px;" multiple class="chzn-select"&gt;</code>
+      <code>&lt;select <strong>data-placeholder="Choose a country..."</strong> style="width:350px;" multiple class="chosen-select"&gt;</code>
       <p><strong>Note:</strong> on single selects, the first element is assumed to be selected by the browser. To take advantage of the default text support, you will need to include a blank option as the first element of your select list.</p>
     </div>
 
@@ -385,7 +385,7 @@
     <div class="side-by-side clearfix">
       <p>Setting the "No results" search text is as easy as passing an option when you create Chosen:</p>
       <code>
-        $(".chzn-select").chosen({no_results_text: "No results matched"});
+        $(".chosen-select").chosen({no_results_text: "No results matched"});
       </code>
     </div>
 
@@ -393,7 +393,7 @@
     <div class="side-by-side clearfix">
       <p>When a single select box isn't a required field, you can set <code>allow_single_deselect: true</code> and Chosen will add a UI element for option deselection. This will only work if the first option has blank text.</p>
       <div class="side-by-side clearfix">
-        <select data-placeholder="Your Favorite Type of Bear" style="width:350px;" class="chzn-select-deselect" tabindex="7">
+        <select data-placeholder="Your Favorite Type of Bear" style="width:350px;" class="chosen-select-deselect" tabindex="7">
           <option value=""></option>
           <option>American Black Bear</option>
           <option>Asiatic Black Bear</option>
@@ -409,11 +409,11 @@
 
     <h2>Right to Left Support</h2>
     <div class="side-by-side clearfix">
-      <p>Chosen supports right to left select boxes too. just add <code>"chzn-rtl"</code> in addition to <code>"chzn-select"</code> to your select tags and you are good to go.</p>
-      <p><code>&lt;select class="chzn-select <strong>chzn-rtl</strong>"&gt;</code></p>
+      <p>Chosen supports right to left select boxes too. just add <code>"chosen-rtl"</code> in addition to <code>"chosen-select"</code> to your select tags and you are good to go.</p>
+      <p><code>&lt;select class="chosen-select <strong>chosen-rtl</strong>"&gt;</code></p>
       <div>
         <em>Single right to left select</em>
-        <select data-placeholder="Your Favorite Type of Bear" style="width:350px;" class="chzn-select chzn-rtl" tabindex="9">
+        <select data-placeholder="Your Favorite Type of Bear" style="width:350px;" class="chosen-select chosen-rtl" tabindex="9">
           <option value=""></option>
           <option>American Black Bear</option>
           <option>Asiatic Black Bear</option>
@@ -425,7 +425,7 @@
       </div>
       <div>
         <em>Multiple right to left select</em>
-        <select data-placeholder="Your Favorite Types of Bear" style="width:350px;" multiple class="chzn-select  chzn-rtl" tabindex="10">
+        <select data-placeholder="Your Favorite Types of Bear" style="width:350px;" multiple class="chosen-select  chosen-rtl" tabindex="10">
           <option value=""></option>
           <option>American Black Bear</option>
           <option>Asiatic Black Bear</option>
@@ -461,7 +461,7 @@
     <p>Using Chosen is easy as can be.</p>
     <ol>
       <li>Download the plugin and copy the chosen files to your app.</li>
-      <li>Activate the plugin on the select boxes of your choice: <code>$(".chzn-select").chosen()</code></li>
+      <li>Activate the plugin on the select boxes of your choice: <code>$(".chosen-select").chosen()</code></li>
       <li><a href="http://youtu.be/pS-RsIzb78U?t=57s">Disco</a>.</li>
     </ol>
 
