@@ -10,55 +10,70 @@
  * Version: 1.0.0
  */
 (function($) {
+    $.fn.chosenSetOrder = function(ordered_elem) {
+        var select = $(this.filter('.chosen-sortable[multiple]'));
+        var $options = select.chosenOrder(ordered_elem);
 
-  $.fn.chosenOrder = function() {
-    var $this   = this.filter('.chzn-sortable[multiple]').first(),
-        $chosen = $this.siblings('.chzn-container');
-
-    return $($chosen.find('.chzn-choices li[class!="search-field"]').map( function() {
-      if (!this) {
-        return undefined;
-      }
-      return $this.find('option:contains(' + $(this).text() + ')')[0];
-    }));
-  };
+        select.children().remove();
+        select.append($options);
+        select.trigger("chosen:updated");
+    };
 
 
-  /*
-   * Extend jQuery
-   */
-  $.fn.chosenSortable = function(){
-    var $this = this.filter('.chzn-sortable[multiple]');
+    $.fn.chosenOrder = function(ordered_elem) {
+        var $this = this.filter('.chosen-sortable[multiple]').first(),
+            $chosen = $this.siblings('.chosen-container'),
+            unselected = [],
+            sorted;
 
-    $this.each(function(){
-      var $select = $(this);
-      var $chosen = $select.siblings('.chzn-container');
+        $this.find('option').each(function() {
+            !this.selected && unselected.push(this);
+        });
 
-      // On mousedown of choice element,
-      // we don't want to display the dropdown list
-      $chosen.find('.chzn-choices').bind('mousedown', function(event){
-        if ($(event.target).is('span')) {
-          event.stopPropagation();
+        if (ordered_elem) {
+            sorted = $(ordered_elem.map(function(elem) {
+                return $this.find('option').filter(function() { return $(this).val() == elem; })[0];
+            }));
+        } else {
+            sorted = $($chosen.find('.chosen-choices li[class!="search-field"]').map(function() {
+                if (!this && !ordered_elem) {
+                    return undefined;
+                }
+                var text = $.trim($(this).text());
+                return $this.find('option').filter(function() { return $(this).html() == text; })[0];
+            }));
         }
-      });
 
-      // Initialize jQuery UI Sortable
-      $chosen.find('.chzn-choices').sortable({
-        'placeholder' : 'ui-state-highlight',
-        'items'       : 'li:not(.search-field)',
-        //'update'      : _update,
-        'tolerance'   : 'pointer'
-      });
+        sorted.push.apply(sorted, unselected);
+        return sorted;
+    };
 
-      // Intercept form submit & order the chosens
-      $select.closest('form').on('submit', function(){
-        var $options = $select.chosenOrder();
-        $select.children().remove();
-        $select.append($options);
-      });
 
-    });
+    /*
+     * Extend jQuery
+     */
+    $.fn.chosenSortable = function(){
+        var $this = this.filter('.chosen-sortable[multiple]');
 
-  };
+        $this.each(function(){
+            var $select = $(this);
+            var $chosen = $select.siblings('.chosen-container');
 
+            // On mousedown of choice element,
+            // we don't want to display the dropdown list
+            $chosen.find('.chosen-choices').bind('mousedown', function(event){
+                if ($(event.target).is('span')) {
+                    event.stopPropagation();
+                }
+            });
+
+            // Initialize jQuery UI Sortable
+            $chosen.find('.chosen-choices').sortable({
+                'placeholder' : 'ui-state-highlight',
+                'items'       : 'li:not(.search-field)',
+                'tolerance'   : 'pointer',
+                'stop'        : function() { $select.chosenSetOrder(); }
+            });
+        });
+    };
 }(jQuery));
