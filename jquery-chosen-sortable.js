@@ -10,9 +10,18 @@
  * Version: 1.0.0
  */
 (function($) {
+    $.fn.chosenSetOrder = function(ordered_elem) {
+        var select = $(this.filter('.chosen-sortable[multiple]'));
+        var $options = select.chosenOrder(ordered_elem);
 
-    $.fn.chosenOrder = function() {
-        var $this   = this.filter('.chosen-sortable[multiple]').first(),
+        select.children().remove();
+        select.append($options);
+        select.trigger("chosen:updated");
+    };
+
+
+    $.fn.chosenOrder = function(ordered_elem) {
+        var $this = this.filter('.chosen-sortable[multiple]').first(),
             $chosen = $this.siblings('.chosen-container'),
             unselected = [],
             sorted;
@@ -21,13 +30,19 @@
             !this.selected && unselected.push(this);
         });
 
-        sorted = $($chosen.find('.chosen-choices li[class!="search-field"]').map(function() {
-            if (!this) {
-                return undefined;
-            }
-            var text = $.trim($(this).text());
-            return $this.find('option').filter(function() { return $(this).html() == text; })[0];
-        }));
+        if (ordered_elem) {
+            sorted = $(ordered_elem.map(function(elem) {
+                return $this.find('option').filter(function() { return $(this).val() == elem; })[0];
+            }));
+        } else {
+            sorted = $($chosen.find('.chosen-choices li[class!="search-field"]').map(function() {
+                if (!this && !ordered_elem) {
+                    return undefined;
+                }
+                var text = $.trim($(this).text());
+                return $this.find('option').filter(function() { return $(this).html() == text; })[0];
+            }));
+        }
 
         sorted.push.apply(sorted, unselected);
         return sorted;
@@ -56,19 +71,9 @@
             $chosen.find('.chosen-choices').sortable({
                 'placeholder' : 'ui-state-highlight',
                 'items'       : 'li:not(.search-field)',
-                //'update'      : _update,
-                'tolerance'   : 'pointer'
+                'tolerance'   : 'pointer',
+                'stop'        : function() { $select.chosenSetOrder(); }
             });
-
-            // Intercept form submit & order the chosens
-            $select.closest('form').on('submit', function(){
-                var $options = $select.chosenOrder();
-                $select.children().remove();
-                $select.append($options);
-                $select.trigger("chosen:updated");
-            });
-
         });
-
     };
 }(jQuery));
